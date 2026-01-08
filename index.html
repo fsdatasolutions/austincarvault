@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAULT | Automotive Hotel & White-Glove Storage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-white: #ffffff;
+            --color-ivory: #faf9f7;
+            --color-soft-gray: #e8e6e3;
+            --color-medium-gray: #9a9894;
+            --color-charcoal: #2d2d2d;
+            --color-black: #0a0a0a;
+            --color-champagne: #c9b896;
+            --color-champagne-light: rgba(201, 184, 150, 0.15);
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Outfit', -apple-system, sans-serif;
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-black);
+            color: var(--color-white);
+            line-height: 1.6;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        /* Smooth reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s var(--transition-smooth), transform 1s var(--transition-smooth);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 0.95) 0%, transparent 100%);
+            transition: all 0.5s var(--transition-smooth);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 1rem 4%;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 400;
+            letter-spacing: 0.4em;
+            color: var(--color-white);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--color-soft-gray);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--color-champagne);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-white);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.75rem;
+            background: transparent;
+            border: 1px solid var(--color-champagne);
+            color: var(--color-champagne);
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--color-champagne);
+            color: var(--color-black);
+        }
+
+        /* Mobile menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 1px;
+            background: var(--color-white);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(135deg, rgba(10, 10, 10, 0.7) 0%, rgba(10, 10, 10, 0.4) 50%, rgba(10, 10, 10, 0.8) 100%),
+                url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80') center/cover no-repeat;
+            transform: scale(1.1);
+            animation: heroZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroZoom {
+            0% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(10, 10, 10, 0.3) 50%,
+                var(--color-black) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 2rem;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--color-champagne);
+            color: var(--color-champagne);
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        .hero-title span {
+            display: block;
+            font-style: italic;
+            color: var(--color-champagne);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--color-soft-gray);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.7s forwards;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            padding: 1.25rem 3rem;
+            background: var(--color-champagne);
+            color: var(--color-black);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.9s forwards;
+        }
+
+        .hero-cta:hover {
+            background: var(--color-white);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(201, 184, 150, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.2s forwards;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--color-medium-gray);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, var(--color-champagne), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 1; transform: scaleY(1); }
+            50% { opacity: 0.5; transform: scaleY(0.8); }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 8rem 4%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-tag {
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--color-champagne);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-description {
+            color: var(--color-medium-gray);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* Experience Section */
+        .experience {
+            background: var(--color-black);
+            position: relative;
+        }
+
+        .experience::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--color-charcoal));
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .experience-card {
+            padding: 3rem;
+            background: linear-gradient(145deg, rgba(45, 45, 45, 0.3) 0%, rgba(10, 10, 10, 0.5) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-champagne), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(201, 184, 150, 0.2);
+        }
+
+        .experience-card:hover::before {
+            opacity: 1;
+        }
+
+        .experience-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.5rem;
+            stroke: var(--color-champagne);
+            stroke-width: 1;
+        }
+
+        .experience-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .experience-card p {
+            color: var(--color-medium-gray);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Services Section */
+        .services {
+            background: linear-gradient(to bottom, var(--color-black), #0f0f0f);
+        }
+
+        .services-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .services-image {
+            position: relative;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+        }
+
+        .services-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%);
+            transition: all 0.8s var(--transition-smooth);
+        }
+
+        .services-image:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .services-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(201, 184, 150, 0.3);
+            pointer-events: none;
+        }
+
+        .services-list {
+            padding: 2rem 0;
+        }
+
+        .service-item {
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover {
+            padding-left: 1rem;
+            border-color: var(--color-champagne);
+        }
+
+        .service-number {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--color-champagne);
+            font-style: italic;
+            min-width: 2rem;
+        }
+
+        .service-content h4 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-content p {
+            color: var(--color-medium-gray);
+            font-size: 0.85rem;
+        }
+
+        /* White Glove Section */
+        .white-glove {
+            background: var(--color-ivory);
+            color: var(--color-black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .white-glove .section-tag {
+            color: var(--color-charcoal);
+        }
+
+        .white-glove .section-description {
+            color: var(--color-charcoal);
+        }
+
+        .white-glove-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .white-glove-text blockquote {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 300;
+            line-height: 1.4;
+            font-style: italic;
+            color: var(--color-charcoal);
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .white-glove-text blockquote::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-champagne);
+        }
+
+        .white-glove-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .white-glove-feature {
+            padding: 0.75rem 1.25rem;
+            background: rgba(201, 184, 150, 0.15);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-charcoal);
+        }
+
+        .white-glove-image {
+            position: relative;
+        }
+
+        .white-glove-image img {
+            width: 100%;
+            height: auto;
+            filter: grayscale(30%) contrast(1.05);
+        }
+
+        .image-frame {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: 20px;
+            bottom: 20px;
+            border: 1px solid var(--color-champagne);
+            pointer-events: none;
+        }
+
+        /* Lounge Section */
+        .lounge {
+            background: var(--color-black);
+            position: relative;
+        }
+
+        .lounge-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .lounge-hero {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 21/9;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .lounge-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8);
+        }
+
+        .lounge-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(10, 10, 10, 0.8) 0%, transparent 50%, rgba(10, 10, 10, 0.8) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lounge-hero-text {
+            text-align: center;
+        }
+
+        .lounge-hero-text h3 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .lounge-hero-text p {
+            color: var(--color-champagne);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-top: 1rem;
+        }
+
+        .lounge-amenities {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .lounge-amenity {
+            padding: 2rem 1rem;
+        }
+
+        .lounge-amenity h4 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .lounge-amenity p {
+            color: var(--color-medium-gray);
+            font-size: 0.8rem;
+        }
+
+        /* Membership Section */
+        .membership {
+            background: linear-gradient(145deg, #111 0%, var(--color-black) 100%);
+            position: relative;
+        }
+
+        .membership::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(201, 184, 150, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .membership-tiers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .tier-card {
+            background: linear-gradient(145deg, rgba(45, 45, 45, 0.2) 0%, rgba(10, 10, 10, 0.4) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.5s var(--transition-smooth);
+        }
+
+        .tier-card:hover {
+            border-color: rgba(201, 184, 150, 0.3);
+            transform: translateY(-10px);
+        }
+
+        .tier-card.featured {
+            border-color: var(--color-champagne);
+            background: linear-gradient(145deg, rgba(201, 184, 150, 0.1) 0%, rgba(10, 10, 10, 0.6) 100%);
+        }
+
+        .tier-card.featured::before {
+            content: 'Most Selected';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-champagne);
+            color: var(--color-black);
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+        }
+
+        .tier-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-tagline {
+            font-size: 0.75rem;
+            color: var(--color-medium-gray);
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+        }
+
+        .tier-price {
+            font-family: var(--font-display);
+            margin-bottom: 2rem;
+        }
+
+        .tier-price .from {
+            font-size: 0.7rem;
+            color: var(--color-medium-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .tier-price .amount {
+            font-size: 3rem;
+            font-weight: 400;
+            color: var(--color-champagne);
+        }
+
+        .tier-price .period {
+            font-size: 0.8rem;
+            color: var(--color-medium-gray);
+        }
+
+        .tier-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .tier-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.85rem;
+            color: var(--color-soft-gray);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tier-features li::before {
+            content: '✓';
+            color: var(--color-champagne);
+            font-size: 0.8rem;
+        }
+
+        .tier-cta {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--color-champagne);
+            background: transparent;
+            color: var(--color-champagne);
+            text-decoration: none;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .tier-cta:hover {
+            background: var(--color-champagne);
+            color: var(--color-black);
+        }
+
+        .tier-card.featured .tier-cta {
+            background: var(--color-champagne);
+            color: var(--color-black);
+        }
+
+        .tier-card.featured .tier-cta:hover {
+            background: var(--color-white);
+        }
+
+        .membership-note {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--color-medium-gray);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* Trust Section */
+        .trust {
+            background: var(--color-black);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .trust-item h4 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 0.75rem;
+        }
+
+        .trust-item p {
+            color: var(--color-medium-gray);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        /* Reservation Section */
+        .reservation {
+            background: linear-gradient(to bottom, var(--color-black), #0a0908);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reservation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-champagne), transparent);
+        }
+
+        .reservation-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .reservation-form {
+            background: linear-gradient(145deg, rgba(45, 45, 45, 0.2) 0%, rgba(10, 10, 10, 0.4) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 4rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-medium-gray);
+            margin-bottom: 0.75rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--color-white);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-champagne);
+            background: rgba(201, 184, 150, 0.05);
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9894' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        .form-group select option {
+            background: var(--color-charcoal);
+            color: var(--color-white);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--color-champagne);
+            border: none;
+            color: var(--color-black);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin-top: 1rem;
+        }
+
+        .form-submit:hover {
+            background: var(--color-white);
+            transform: translateY(-2px);
+        }
+
+        .form-disclaimer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: var(--color-medium-gray);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-black);
+            padding: 4rem 4% 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .footer-brand p {
+            color: var(--color-medium-gray);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-column h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: var(--color-soft-gray);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column ul a {
+            color: var(--color-medium-gray);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul a:hover {
+            color: var(--color-champagne);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            font-size: 0.75rem;
+            color: var(--color-medium-gray);
+        }
+
+        .footer-legal a {
+            color: var(--color-medium-gray);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--color-champagne);
+        }
+
+        /* Success Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-charcoal);
+            padding: 4rem;
+            text-align: center;
+            max-width: 500px;
+            border: 1px solid rgba(201, 184, 150, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 2rem;
+            stroke: var(--color-champagne);
+        }
+
+        .modal-content h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            color: var(--color-medium-gray);
+            margin-bottom: 2rem;
+        }
+
+        .modal-close {
+            padding: 1rem 2rem;
+            background: var(--color-champagne);
+            border: none;
+            color: var(--color-black);
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--color-white);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .services-showcase {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .services-image {
+                aspect-ratio: 16/9;
+            }
+
+            .white-glove-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .membership-tiers {
+                grid-template-columns: 1fr;
+                max-width: 450px;
+            }
+
+            .lounge-amenities {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .trust-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            section {
+                padding: 5rem 5%;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .reservation-form {
+                padding: 2rem;
+            }
+
+            .lounge-amenities {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-legal a {
+                margin: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">VAULT</a>
+        <ul class="nav-links">
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#lounge">Members Lounge</a></li>
+            <li><a href="#membership">Membership</a></li>
+        </ul>
+        <button class="nav-cta" onclick="scrollToReservation()">Reserve Your Space</button>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="coming-soon-badge">Now Accepting Founding Members</span>
+            <h1 class="hero-title">
+                A Five-Star Hotel for<br>
+                <span>the World's Finest Automobiles</span>
+            </h1>
+            <p class="hero-subtitle">White-glove automotive storage & concierge services · Members only</p>
+            <a href="#reservation" class="hero-cta">Request Membership Access</a>
+        </div>
+        <div class="scroll-indicator">
+            <span>Discover</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience" id="experience">
+        <div class="section-header reveal">
+            <span class="section-tag">The Vault Experience</span>
+            <h2 class="section-title">Beyond Storage.<br>A Sanctuary for Exceptional Vehicles.</h2>
+            <p class="section-description">
+                We created Vault for collectors who understand that an extraordinary automobile 
+                deserves extraordinary care. This is not a parking facility. This is home.
+            </p>
+        </div>
+        <div class="experience-grid">
+            <div class="experience-card reveal">
+                <svg class="experience-icon" viewBox="0 0 48 48" fill="none">
+                    <rect x="4" y="8" width="40" height="32" rx="2" stroke="currentColor"/>
+                    <path d="M4 16h40" stroke="currentColor"/>
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                </svg>
+                <h3>Climate-Controlled Environment</h3>
+                <p>Precision temperature and humidity control maintains optimal conditions year-round, 
+                protecting paint, leather, and mechanical components from environmental stress.</p>
+            </div>
+            <div class="experience-card reveal">
+                <svg class="experience-icon" viewBox="0 0 48 48" fill="none">
+                    <circle cx="24" cy="24" r="18" stroke="currentColor"/>
+                    <path d="M24 12v12l8 8" stroke="currentColor"/>
+                </svg>
+                <h3>Daily Vehicle Attention</h3>
+                <p>Every vehicle receives daily inspection and scheduled start-ups. Battery health, 
+                tire pressure, and fluid levels are monitored continuously by our dedicated team.</p>
+            </div>
+            <div class="experience-card reveal">
+                <svg class="experience-icon" viewBox="0 0 48 48" fill="none">
+                    <path d="M24 4l6 12 13 2-9 9 2 13-12-6-12 6 2-13-9-9 13-2z" stroke="currentColor"/>
+                </svg>
+                <h3>Personal Concierge</h3>
+                <p>From coordinating service appointments to preparing your vehicle for weekend drives, 
+                your dedicated concierge ensures every detail is handled with precision.</p>
+            </div>
+            <div class="experience-card reveal">
+                <svg class="experience-icon" viewBox="0 0 48 48" fill="none">
+                    <rect x="8" y="12" width="32" height="24" rx="2" stroke="currentColor"/>
+                    <circle cx="24" cy="24" r="6" stroke="currentColor"/>
+                    <circle cx="24" cy="24" r="2" fill="currentColor"/>
+                </svg>
+                <h3>Photo Documentation</h3>
+                <p>Receive scheduled photo updates of your vehicle, capturing its pristine condition 
+                and providing peace of mind wherever you are in the world.</p>
+            </div>
+            <div class="experience-card reveal">
+                <svg class="experience-icon" viewBox="0 0 48 48" fill="none">
+                    <path d="M24 4v8M24 36v8M44 24h-8M12 24H4" stroke="currentColor"/>
+                    <circle cx="24" cy="24" r="12" stroke="currentColor"/>
+                    <path d="M24 16v8l6 6" stroke="currentColor"/>
+                </svg>
+                <h3>Strict Access Control</h3>
+                <p>Biometric entry, 24/7 surveillance, and a strictly limited member roster ensure 
+                your vehicle remains secure and your privacy remains absolute.</p>
+            </div>
+            <div class="experience-card reveal">
+                <svg class="experience-icon" viewBox="0 0 48 48" fill="none">
+                    <path d="M8 40V20l16-12 16 12v20H8z" stroke="currentColor"/>
+                    <rect x="18" y="28" width="12" height="12" stroke="currentColor"/>
+                </svg>
+                <h3>Collector Community</h3>
+                <p>Join a private community of like-minded enthusiasts. Exclusive events, drives, 
+                and gatherings connect you with fellow collectors who share your passion.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="section-header reveal">
+            <span class="section-tag">White-Glove Services</span>
+            <h2 class="section-title">Every Detail, Handled</h2>
+        </div>
+        <div class="services-showcase">
+            <div class="services-image reveal">
+                <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800&q=80" 
+                     alt="Luxury car being detailed">
+            </div>
+            <div class="services-list">
+                <div class="service-item reveal">
+                    <span class="service-number">01</span>
+                    <div class="service-content">
+                        <h4>Hand Wash & Detailing</h4>
+                        <p>Meticulous hand washing using only pH-balanced products, followed by 
+                        professional detailing to maintain showroom brilliance.</p>
+                    </div>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-number">02</span>
+                    <div class="service-content">
+                        <h4>Maintenance Coordination</h4>
+                        <p>We coordinate with your preferred dealerships and specialists, managing 
+                        appointments, transport, and quality oversight.</p>
+                    </div>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-number">03</span>
+                    <div class="service-content">
+                        <h4>Event Preparation</h4>
+                        <p>Whether it's a concours, a spirited drive, or a special occasion, your 
+                        vehicle arrives immaculately prepared and ready.</p>
+                    </div>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-number">04</span>
+                    <div class="service-content">
+                        <h4>Transport Coordination</h4>
+                        <p>Enclosed transport arranged with trusted partners for shows, service, 
+                        or relocation—handled with complete discretion.</p>
+                    </div>
+                </div>
+                <div class="service-item reveal">
+                    <span class="service-number">05</span>
+                    <div class="service-content">
+                        <h4>Oil Changes & Fluids</h4>
+                        <p>On-site fluid services performed by certified technicians using 
+                        manufacturer-specified products.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- White Glove Section -->
+    <section class="white-glove">
+        <div class="white-glove-content">
+            <div class="white-glove-text reveal">
+                <span class="section-tag">Our Standard</span>
+                <blockquote>
+                    "Every vehicle is handled as if it were irreplaceable. 
+                    No shortcuts. No mass handling. Only precision, 
+                    care, and absolute discretion."
+                </blockquote>
+                <div class="white-glove-features">
+                    <span class="white-glove-feature">White-Glove Staff</span>
+                    <span class="white-glove-feature">Tailored Uniforms</span>
+                    <span class="white-glove-feature">Precision Handling</span>
+                    <span class="white-glove-feature">Complete Discretion</span>
+                    <span class="white-glove-feature">24/7 Availability</span>
+                </div>
+            </div>
+            <div class="white-glove-image reveal">
+                <div class="image-frame"></div>
+                <img src="https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=700&q=80" 
+                     alt="Professional automotive care">
+            </div>
+        </div>
+    </section>
+
+    <!-- Members Lounge Section -->
+    <section class="lounge" id="lounge">
+        <div class="section-header reveal">
+            <span class="section-tag">Members Lounge</span>
+            <h2 class="section-title">Your Private Retreat</h2>
+            <p class="section-description">
+                More than a waiting room—a sanctuary designed for collectors to relax, 
+                work, and connect in refined comfort.
+            </p>
+        </div>
+        <div class="lounge-showcase">
+            <div class="lounge-hero reveal">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&q=80" 
+                     alt="Luxury members lounge">
+                <div class="lounge-hero-overlay">
+                    <div class="lounge-hero-text">
+                        <h3>The Collector's Club</h3>
+                        <p>Exclusively for Vault Members</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lounge-amenities reveal">
+                <div class="lounge-amenity">
+                    <h4>Private Workspace</h4>
+                    <p>High-speed connectivity and quiet spaces for focused work</p>
+                </div>
+                <div class="lounge-amenity">
+                    <h4>Curated Refreshments</h4>
+                    <p>Specialty coffee, fine teas, and premium beverages</p>
+                </div>
+                <div class="lounge-amenity">
+                    <h4>Comfortable Seating</h4>
+                    <p>Italian leather furnishings in a refined atmosphere</p>
+                </div>
+                <div class="lounge-amenity">
+                    <h4>Viewing Gallery</h4>
+                    <p>Floor-to-ceiling windows overlooking the collection</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Membership Section -->
+    <section class="membership" id="membership">
+        <div class="section-header reveal">
+            <span class="section-tag">Membership Preview</span>
+            <h2 class="section-title">Tailored to Your Collection</h2>
+            <p class="section-description">
+                Three tiers of membership designed to accommodate every collector, 
+                from the single prized possession to the extensive private collection.
+            </p>
+        </div>
+        <div class="membership-tiers">
+            <div class="tier-card reveal">
+                <h3 class="tier-name">Essential</h3>
+                <p class="tier-tagline">For the discerning owner</p>
+                <div class="tier-price">
+                    <span class="from">Starting from</span>
+                    <span class="amount">$500</span>
+                    <span class="period">/month</span>
+                </div>
+                <ul class="tier-features">
+                    <li>Single vehicle storage</li>
+                    <li>Climate-controlled environment</li>
+                    <li>Weekly vehicle inspection</li>
+                    <li>Monthly photo updates</li>
+                    <li>Members lounge access</li>
+                </ul>
+                <button class="tier-cta" onclick="scrollToReservation()">Request Information</button>
+            </div>
+            <div class="tier-card featured reveal">
+                <h3 class="tier-name">Collector</h3>
+                <p class="tier-tagline">For the serious enthusiast</p>
+                <div class="tier-price">
+                    <span class="from">Starting from</span>
+                    <span class="amount">$2,500</span>
+                    <span class="period">/month</span>
+                </div>
+                <ul class="tier-features">
+                    <li>Up to 5 vehicles</li>
+                    <li>Daily vehicle attention</li>
+                    <li>Weekly photo updates</li>
+                    <li>Dedicated concierge</li>
+                    <li>Priority event preparation</li>
+                    <li>Quarterly detailing included</li>
+                </ul>
+                <button class="tier-cta" onclick="scrollToReservation()">Request Information</button>
+            </div>
+            <div class="tier-card reveal">
+                <h3 class="tier-name">Private Collection</h3>
+                <p class="tier-tagline">By invitation only</p>
+                <div class="tier-price">
+                    <span class="from">Starting from</span>
+                    <span class="amount">$10,000</span>
+                    <span class="period">/month</span>
+                </div>
+                <ul class="tier-features">
+                    <li>Unlimited vehicle storage</li>
+                    <li>Private dedicated wing</li>
+                    <li>24/7 personal concierge</li>
+                    <li>Daily photo updates</li>
+                    <li>Full maintenance coordination</li>
+                    <li>Private events & showcases</li>
+                </ul>
+                <button class="tier-cta" onclick="scrollToReservation()">Request Consultation</button>
+            </div>
+        </div>
+        <p class="membership-note reveal">
+            Final pricing determined by vehicle type, storage requirements, and selected amenities.
+        </p>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust">
+        <div class="section-header reveal">
+            <span class="section-tag">Our Commitment</span>
+            <h2 class="section-title">Built on Trust</h2>
+        </div>
+        <div class="trust-grid">
+            <div class="trust-item reveal">
+                <h4>Professional Excellence</h4>
+                <p>Every team member is thoroughly vetted, trained, and 
+                committed to the highest standards of automotive care.</p>
+            </div>
+            <div class="trust-item reveal">
+                <h4>Facility Standards</h4>
+                <p>Purpose-built environment exceeding industry standards 
+                for security, climate control, and preservation.</p>
+            </div>
+            <div class="trust-item reveal">
+                <h4>Complete Confidentiality</h4>
+                <p>Your collection, your privacy. We maintain absolute 
+                discretion regarding members and their vehicles.</p>
+            </div>
+            <div class="trust-item reveal">
+                <h4>Comprehensive Coverage</h4>
+                <p>Full insurance protection for all vehicles while 
+                in our care, including during transport coordination.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section class="reservation" id="reservation">
+        <div class="section-header reveal">
+            <span class="section-tag">Limited Availability</span>
+            <h2 class="section-title">Reserve Your Space</h2>
+            <p class="section-description">
+                Founding members receive priority access and exclusive benefits. 
+                Complete the form below to begin your membership inquiry.
+            </p>
+        </div>
+        <div class="reservation-container">
+            <form class="reservation-form reveal" id="reservationForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="vehicles">Number of Vehicles</label>
+                        <select id="vehicles" name="vehicles" required>
+                            <option value="">Select</option>
+                            <option value="1">1 Vehicle</option>
+                            <option value="2-3">2-3 Vehicles</option>
+                            <option value="4-5">4-5 Vehicles</option>
+                            <option value="6+">6+ Vehicles</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tier">Interested Membership Tier</label>
+                        <select id="tier" name="tier" required>
+                            <option value="">Select</option>
+                            <option value="essential">Essential ($500+/month)</option>
+                            <option value="collector">Collector ($2,500+/month)</option>
+                            <option value="private">Private Collection ($10,000+/month)</option>
+                            <option value="undecided">Undecided - Need Guidance</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="vehicleTypes">Vehicle Types (Optional)</label>
+                    <textarea id="vehicleTypes" name="vehicleTypes" 
+                        placeholder="Please describe your collection: makes, models, and any special requirements..."></textarea>
+                </div>
+                <button type="submit" class="form-submit">Submit Reservation Request</button>
+                <p class="form-disclaimer">
+                    By submitting this form, you agree to be contacted by our membership team. 
+                    Your information will remain strictly confidential.
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">VAULT</a>
+                <p>
+                    The world's premier automotive hotel, offering white-glove storage 
+                    and concierge services for discerning collectors.
+                </p>
+            </div>
+            <div class="footer-column">
+                <h4>Experience</h4>
+                <ul>
+                    <li><a href="#experience">The Vault Difference</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#lounge">Members Lounge</a></li>
+                    <li><a href="#membership">Membership</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Membership</h4>
+                <ul>
+                    <li><a href="#reservation">Reserve Your Space</a></li>
+                    <li><a href="#membership">Pricing Preview</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:membership@vaultauto.com">membership@vaultauto.com</a></li>
+                    <li><a href="tel:+18005551234">+1 (800) 555-1234</a></li>
+                    <li><a href="#">Schedule a Visit</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Vault Automotive Hotel. All rights reserved.</span>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <svg class="modal-icon" viewBox="0 0 60 60" fill="none" stroke="currentColor">
+                <circle cx="30" cy="30" r="28" stroke-width="1"/>
+                <path d="M18 30l8 8 16-16" stroke-width="2"/>
+            </svg>
+            <h3>Request Received</h3>
+            <p>Thank you for your interest in Vault. A membership advisor 
+            will contact you within 24 hours to discuss your requirements.</p>
+            <button class="modal-close" onclick="closeModal()">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        // Navigation scroll effect
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Reveal animations on scroll
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                if (rect.top < windowHeight * 0.85) {
+                    el.classList.add('visible');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // Smooth scroll to reservation
+        function scrollToReservation() {
+            document.getElementById('reservation').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Form submission
+        document.getElementById('reservationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission
+            const formData = new FormData(this);
+            console.log('Form submitted:', Object.fromEntries(formData));
+            
+            // Show success modal
+            document.getElementById('successModal').classList.add('active');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Escape key closes modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
